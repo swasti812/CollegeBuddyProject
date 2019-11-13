@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CollegeBuddyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AdditionalSubjects">
+    <Key>
+      <PropertyRef Name="Seq" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Key" Type="int" Nullable="false" />
+    <Property Name="Seq" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BranchTable">
+    <Key>
+      <PropertyRef Name="BID" />
+    </Key>
+    <Property Name="BID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Branch" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CommentTable">
+    <Key>
+      <PropertyRef Name="Serial" />
+    </Key>
+    <Property Name="AID" Type="int" Nullable="false" />
+    <Property Name="Comments" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DateTime" Type="datetime" Nullable="false" />
+    <Property Name="Serial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DashboardAnswer">
+    <Key>
+      <PropertyRef Name="AID" />
+    </Key>
+    <Property Name="AID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="QID" Type="int" Nullable="false" />
+    <Property Name="Answer" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Upvotes" Type="int" />
+  </EntityType>
+  <EntityType Name="DashboardQuestion">
+    <Key>
+      <PropertyRef Name="QID" />
+    </Key>
+    <Property Name="QID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Question" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Datetime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Details">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="College" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Branch" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Year" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="MobileNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Image" Type="nvarchar(max)" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="AuthCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="IsVerified" Type="bit" />
+    <Property Name="datetime" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="LibraryTable">
+    <Key>
+      <PropertyRef Name="seq" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Pkey" Type="int" Nullable="false" />
+    <Property Name="seq" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PDFDetails">
+    <Key>
+      <PropertyRef Name="Primarykey" />
+    </Key>
+    <Property Name="PKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Review" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Rating" Type="int" Nullable="false" />
+    <Property Name="Downloads" Type="int" Nullable="false" />
+    <Property Name="User" Type="int" Nullable="false" />
+    <Property Name="Primarykey" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PDFTable">
+    <Key>
+      <PropertyRef Name="PKey" />
+    </Key>
+    <Property Name="PKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NameOfPDF" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Storage" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Key" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SubjectTable">
+    <Key>
+      <PropertyRef Name="Key" />
+    </Key>
+    <Property Name="Key" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Year" Type="int" Nullable="false" />
+    <Property Name="BID" Type="int" Nullable="false" />
+    <Property Name="Subject" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_AdditionalSubjects_Details">
+    <End Role="Details" Type="Self.Details" Multiplicity="1" />
+    <End Role="AdditionalSubjects" Type="Self.AdditionalSubjects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Details">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="AdditionalSubjects">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AdditionalSubjects_SubjectTable">
+    <End Role="SubjectTable" Type="Self.SubjectTable" Multiplicity="1" />
+    <End Role="AdditionalSubjects" Type="Self.AdditionalSubjects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectTable">
+        <PropertyRef Name="Key" />
+      </Principal>
+      <Dependent Role="AdditionalSubjects">
+        <PropertyRef Name="Key" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommentTable_DashboardAnswer">
+    <End Role="DashboardAnswer" Type="Self.DashboardAnswer" Multiplicity="1" />
+    <End Role="CommentTable" Type="Self.CommentTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DashboardAnswer">
+        <PropertyRef Name="AID" />
+      </Principal>
+      <Dependent Role="CommentTable">
+        <PropertyRef Name="AID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DashboardAnswer_DashboardAnswer">
+    <End Role="DashboardQuestion" Type="Self.DashboardQuestion" Multiplicity="1" />
+    <End Role="DashboardAnswer" Type="Self.DashboardAnswer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DashboardQuestion">
+        <PropertyRef Name="QID" />
+      </Principal>
+      <Dependent Role="DashboardAnswer">
+        <PropertyRef Name="QID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DashboardAnswer_DashboardAnswer1">
+    <End Role="DashboardAnswer" Type="Self.DashboardAnswer" Multiplicity="1" />
+    <End Role="DashboardAnswer1" Type="Self.DashboardAnswer" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="DashboardAnswer">
+        <PropertyRef Name="AID" />
+      </Principal>
+      <Dependent Role="DashboardAnswer1">
+        <PropertyRef Name="AID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LibraryTable_Details">
+    <End Role="Details" Type="Self.Details" Multiplicity="1" />
+    <End Role="LibraryTable" Type="Self.LibraryTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Details">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="LibraryTable">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LibraryTable_PDFTable">
+    <End Role="PDFTable" Type="Self.PDFTable" Multiplicity="1" />
+    <End Role="LibraryTable" Type="Self.LibraryTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PDFTable">
+        <PropertyRef Name="PKey" />
+      </Principal>
+      <Dependent Role="LibraryTable">
+        <PropertyRef Name="Pkey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PDFDetails_PDFTable">
+    <End Role="PDFTable" Type="Self.PDFTable" Multiplicity="1" />
+    <End Role="PDFDetails" Type="Self.PDFDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PDFTable">
+        <PropertyRef Name="PKey" />
+      </Principal>
+      <Dependent Role="PDFDetails">
+        <PropertyRef Name="PKey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PDFTable_PDFTable">
+    <End Role="SubjectTable" Type="Self.SubjectTable" Multiplicity="1" />
+    <End Role="PDFTable" Type="Self.PDFTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectTable">
+        <PropertyRef Name="Key" />
+      </Principal>
+      <Dependent Role="PDFTable">
+        <PropertyRef Name="Key" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CollegeBuddyModelStoreContainer">
+    <EntitySet Name="AdditionalSubjects" EntityType="Self.AdditionalSubjects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BranchTable" EntityType="Self.BranchTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CommentTable" EntityType="Self.CommentTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DashboardAnswer" EntityType="Self.DashboardAnswer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DashboardQuestion" EntityType="Self.DashboardQuestion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Details" EntityType="Self.Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LibraryTable" EntityType="Self.LibraryTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PDFDetails" EntityType="Self.PDFDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PDFTable" EntityType="Self.PDFTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubjectTable" EntityType="Self.SubjectTable" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_AdditionalSubjects_Details" Association="Self.FK_AdditionalSubjects_Details">
+      <End Role="Details" EntitySet="Details" />
+      <End Role="AdditionalSubjects" EntitySet="AdditionalSubjects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdditionalSubjects_SubjectTable" Association="Self.FK_AdditionalSubjects_SubjectTable">
+      <End Role="SubjectTable" EntitySet="SubjectTable" />
+      <End Role="AdditionalSubjects" EntitySet="AdditionalSubjects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommentTable_DashboardAnswer" Association="Self.FK_CommentTable_DashboardAnswer">
+      <End Role="DashboardAnswer" EntitySet="DashboardAnswer" />
+      <End Role="CommentTable" EntitySet="CommentTable" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DashboardAnswer_DashboardAnswer" Association="Self.FK_DashboardAnswer_DashboardAnswer">
+      <End Role="DashboardQuestion" EntitySet="DashboardQuestion" />
+      <End Role="DashboardAnswer" EntitySet="DashboardAnswer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DashboardAnswer_DashboardAnswer1" Association="Self.FK_DashboardAnswer_DashboardAnswer1">
+      <End Role="DashboardAnswer" EntitySet="DashboardAnswer" />
+      <End Role="DashboardAnswer1" EntitySet="DashboardAnswer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LibraryTable_Details" Association="Self.FK_LibraryTable_Details">
+      <End Role="Details" EntitySet="Details" />
+      <End Role="LibraryTable" EntitySet="LibraryTable" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LibraryTable_PDFTable" Association="Self.FK_LibraryTable_PDFTable">
+      <End Role="PDFTable" EntitySet="PDFTable" />
+      <End Role="LibraryTable" EntitySet="LibraryTable" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PDFDetails_PDFTable" Association="Self.FK_PDFDetails_PDFTable">
+      <End Role="PDFTable" EntitySet="PDFTable" />
+      <End Role="PDFDetails" EntitySet="PDFDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PDFTable_PDFTable" Association="Self.FK_PDFTable_PDFTable">
+      <End Role="SubjectTable" EntitySet="SubjectTable" />
+      <End Role="PDFTable" EntitySet="PDFTable" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

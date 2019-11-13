@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CollegeBuddyModelStoreContainer" CdmEntityContainer="CollegeBuddyEntities">
+    <EntitySetMapping Name="Details">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.Detail">
+        <MappingFragment StoreEntitySet="Details">
+          <ScalarProperty Name="datetime" ColumnName="datetime" />
+          <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
+          <ScalarProperty Name="AuthCode" ColumnName="AuthCode" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="College" ColumnName="College" />
+          <ScalarProperty Name="Branch" ColumnName="Branch" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DashboardAnswers">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.DashboardAnswer">
+        <MappingFragment StoreEntitySet="DashboardAnswer">
+          <ScalarProperty Name="Upvotes" ColumnName="Upvotes" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Answer" ColumnName="Answer" />
+          <ScalarProperty Name="QID" ColumnName="QID" />
+          <ScalarProperty Name="AID" ColumnName="AID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DashboardQuestions">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.DashboardQuestion">
+        <MappingFragment StoreEntitySet="DashboardQuestion">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+          <ScalarProperty Name="Question" ColumnName="Question" />
+          <ScalarProperty Name="QID" ColumnName="QID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdditionalSubjects">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.AdditionalSubject">
+        <MappingFragment StoreEntitySet="AdditionalSubjects">
+          <ScalarProperty Name="Seq" ColumnName="Seq" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BranchTables">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.BranchTable">
+        <MappingFragment StoreEntitySet="BranchTable">
+          <ScalarProperty Name="Branch" ColumnName="Branch" />
+          <ScalarProperty Name="BID" ColumnName="BID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommentTables">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.CommentTable">
+        <MappingFragment StoreEntitySet="CommentTable">
+          <ScalarProperty Name="Serial" ColumnName="Serial" />
+          <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="AID" ColumnName="AID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LibraryTables">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.LibraryTable">
+        <MappingFragment StoreEntitySet="LibraryTable">
+          <ScalarProperty Name="seq" ColumnName="seq" />
+          <ScalarProperty Name="Pkey" ColumnName="Pkey" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PDFDetails">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.PDFDetail">
+        <MappingFragment StoreEntitySet="PDFDetails">
+          <ScalarProperty Name="Primarykey" ColumnName="Primarykey" />
+          <ScalarProperty Name="User" ColumnName="User" />
+          <ScalarProperty Name="Downloads" ColumnName="Downloads" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="Review" ColumnName="Review" />
+          <ScalarProperty Name="PKey" ColumnName="PKey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PDFTables">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.PDFTable">
+        <MappingFragment StoreEntitySet="PDFTable">
+          <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Storage" ColumnName="Storage" />
+          <ScalarProperty Name="NameOfPDF" ColumnName="NameOfPDF" />
+          <ScalarProperty Name="PKey" ColumnName="PKey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubjectTables">
+      <EntityTypeMapping TypeName="CollegeBuddyModel.SubjectTable">
+        <MappingFragment StoreEntitySet="SubjectTable">
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="BID" ColumnName="BID" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
