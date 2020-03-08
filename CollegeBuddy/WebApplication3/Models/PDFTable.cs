@@ -25,7 +25,7 @@ namespace WebApplication3.Models
         public string NameOfPDF { get; set; }
         public string Storage { get; set; }
         public string Type { get; set; }
-        public int Key { get; set; }
+        public Nullable<int> Key { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LibraryTable> LibraryTables { get; set; }

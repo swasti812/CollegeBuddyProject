@@ -22,15 +22,22 @@ namespace WebApplication3.Controllers
         {
             try
             {
-                detail.Password = Crypto.Hash(detail.Password);
-                var context = new CollegeBuddyEntities();
-                new  MemberDetails().otpfunc(detail);
-                context.Details.Add(detail);
-                context.SaveChanges();
-                var message = Request.CreateResponse(HttpStatusCode.Created, detail);
-                message.Headers.Location = new Uri(Request.RequestUri + detail.ID.ToString());
-                return message;
-
+                var x = MemberDetails.IsExist(detail.MobileNo);
+                if (x == false)
+                {
+                    detail.Password = Crypto.Hash(detail.Password);
+                    var context = new CollegeBuddyEntities();
+                    new MemberDetails().otpfunc(detail);
+                    context.Details.Add(detail);
+                    context.SaveChanges();
+                    var message = Request.CreateResponse(HttpStatusCode.Created, detail);
+                    message.Headers.Location = new Uri(Request.RequestUri + detail.ID.ToString());
+                    return message;
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.Conflict, "Account already exists");
+                }
             }
             catch (Exception ex)
             {
@@ -57,6 +64,7 @@ namespace WebApplication3.Controllers
                 {   if (s.TotalMinutes < 2)
                     {
                         obj.IsVerified = true;
+                        context.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, "Verified");
                     }
                     else
@@ -67,7 +75,7 @@ namespace WebApplication3.Controllers
                 else
                 {
 
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound,"Recheck otp");
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound,"Invalid OTP");
 
                 }
             }
@@ -87,7 +95,7 @@ namespace WebApplication3.Controllers
             {
                 var context = new CollegeBuddyEntities();
                 var xyz = Crypto.Hash(detail.Password);
-                Detail CurrentUser = context.Details.FirstOrDefault(x => x.MobileNo == detail.MobileNo && x.Password == xyz);
+                Detail CurrentUser = context.Details.SingleOrDefault(x => x.MobileNo == detail.MobileNo && x.Password == xyz);
                 if (CurrentUser == null)
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Username/Password is incorrect");
@@ -103,12 +111,12 @@ namespace WebApplication3.Controllers
                         TOKEN_cs obj = new TOKEN_cs();
             
                         //var a = "token:" +TokenManager.GenerateToken(CurrentUser.Name);
-                        return Request.CreateResponse(HttpStatusCode.OK,TokenManager.GenerateToken(CurrentUser.Name));
+                        return Request.CreateResponse(HttpStatusCode.OK,TokenManager.GenerateToken(CurrentUser.MobileNo));
                         
                     }
                 }
 
-                //return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Username/Password is incorrect");
+                
 
             }
 
@@ -123,20 +131,25 @@ namespace WebApplication3.Controllers
 
         [HttpPost]
         [Route("api/Member/ResendOtp/{ID}")]
-        public System.Web.Http.Results.RedirectToRouteResult ResendOtp([FromUri] int ID)
+        public HttpResponseMessage ResendOtp([FromUri] int ID)
         {
-            
+            try
+            {
                 var context = new CollegeBuddyEntities();
                 var obj = context.Details.SingleOrDefault(x => x.ID == ID);
                 new MemberDetails().otpfunc(obj);
                 context.SaveChanges();
-                return RedirectToRoute("Verify",ID);
-               
-               
+                return Request.CreateResponse(HttpStatusCode.OK, "OTP Sent");
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
+            }
+
         }
 
-        //[HttpGet]
-        //[Route("api/Member/Validate")]
+      
         public static string ValidateToken(string token)
         {
             string username = null;
@@ -157,38 +170,50 @@ namespace WebApplication3.Controllers
             return username;
         }
 
-        [HttpPost]
-        [Route("api/Member/ImageUpload")]
-        public HttpResponseMessage ImageUpload([FromUri] string token,[FromBody]string Path)
-        {
-            try
-            {
-                var user = MemberController.ValidateToken(token);
-                var context = new CollegeBuddyEntities();
-                var obj = context.Details.SingleOrDefault(x => x.Name == user);
-                obj.Image = Path;
-                context.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, "Added");
 
-            }
-            catch(Exception ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
-
-            }
-        }
 
         [HttpGet]
         [Route("api/Member/Profile")]
 
         public HttpResponseMessage Profile([FromUri] string token)
         {
-            var user = MemberController.ValidateToken(token);
-            var context = new CollegeBuddyEntities();
-            var obj = context.Details.FirstOrDefault(xa => xa.Name == user);
-            var x= context.Details.SqlQuery("Select * from Details where ID=" + obj.ID);
-            return Request.CreateResponse(HttpStatusCode.OK, x);
+            try
+            {
+                var context = new CollegeBuddyEntities();
+                var obj = TokenManager.Identifytoken(token);
+                if (obj == null)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Token");
+                MemberDetails.YearEdit(obj);
+                var query = context.Details.Where(x => x.ID == obj.ID).Select(p => new { p.ID, p.Image, p.Name, obj.Year, p.Branch, p.College }).ToList();
+                MemberDetails.YearFix(obj);
+                return Request.CreateResponse(HttpStatusCode.OK, query);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            } }
+   
 
+        [HttpPost]
+        [Route("api/Member/EditProfile")]
+     public HttpResponseMessage EditProfile([FromUri] string token,[FromBody] EditProfile obj)
+        {
+            try
+            {
+                var context = new CollegeBuddyEntities();
+                var x = TokenManager.Identifytoken(token);
+                if (x == null)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Token");
+                var message = MemberDetails.ProfileEdit(x.ID, obj);
+                
+                return Request.CreateResponse(HttpStatusCode.OK, message);
+
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
+            
     }
 }

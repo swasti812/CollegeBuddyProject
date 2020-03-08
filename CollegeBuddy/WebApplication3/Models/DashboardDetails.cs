@@ -14,5 +14,27 @@ namespace WebApplication3.Models
         public int AID { get; set; }
         public string Answer { get; set; }
 
+        public static string LibraryPDF(int Pkey,Detail user)
+        {
+            var context = new CollegeBuddyEntities();
+            LibraryTable xy = new LibraryTable();
+            var obj = context.LibraryTables.SingleOrDefault(x => x.Pkey == Pkey && x.ID == user.ID);
+            //var obj = context.LibraryTables.SqlQuery("Select * from LibraryTable where Pkey="+Pkey+"and ID="+user.ID);
+           //var obj = context.LibraryTables.SingleOrDefault(x => x.Pkey == Pkey);
+            if (obj == null)
+            {
+                xy.ID = user.ID;
+                xy.Pkey = Pkey;
+                context.LibraryTables.Add(xy);
+                context.SaveChanges();
+                return ("Added to library");
+            }
+            else
+            {
+                return ("PDF Already in library");
+            }
+        }
     }
+
+    
 }

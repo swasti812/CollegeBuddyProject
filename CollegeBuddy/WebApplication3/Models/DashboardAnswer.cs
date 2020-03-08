@@ -25,9 +25,12 @@ namespace WebApplication3.Models
         public string Answer { get; set; }
         public string Name { get; set; }
         public Nullable<int> Upvotes { get; set; }
+        public Nullable<int> identify { get; set; }
     
         public virtual DashboardQuestion DashboardQuestion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CommentTable> CommentTables { get; set; }
+        public virtual DashboardAnswer DashboardAnswer1 { get; set; }
+        public virtual DashboardAnswer DashboardAnswer2 { get; set; }
     }
 }

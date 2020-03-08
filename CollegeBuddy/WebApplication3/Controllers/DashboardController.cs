@@ -12,20 +12,23 @@ namespace WebApplication3.Controllers
     {
         [HttpGet]
         [Route("api/Dashboard/Home")]
-        public System.Data.Entity.Infrastructure.DbSqlQuery<DashboardQuestion> DB([FromUri] string token)
+        public HttpResponseMessage DB([FromUri] string token)
         {
 
-
-            var user = MemberController.ValidateToken(token);
-            //DashboardDetails obj;
-            var context = new CollegeBuddyEntities();
-            var obj = context.Details.FirstOrDefault(x => x.Name == user);
-
-            //var context = new CollegeBuddyEntities();
-            var objx = context.DashboardQuestions.SqlQuery("Select * from DashboardQuestion ");
-            //var a = "hello";
-            return objx;//obj=context.
-
+            try
+            {               
+                var context = new CollegeBuddyEntities();
+                var obj = TokenManager.Identifytoken(token);
+                if (obj == null)
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Token");
+                var objx = from x in context.DashboardQuestions join y in context.Details on x.Number equals y.ID where x.CollegeName == obj.College select new { x.Question,x.QID,x.Datetime,x.ID,y.Image};
+                //var objx = context.DashboardQuestions.SqlQuery("Select * from DashboardQuestion where CollegeName= '"+obj.College+"'");                      
+                 return Request.CreateResponse(HttpStatusCode.OK, objx);
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         
@@ -35,19 +38,19 @@ namespace WebApplication3.Controllers
         {
             try
             {
-                
-            var user = MemberController.ValidateToken(token);
-            var context = new CollegeBuddyEntities();
-            var obj = context.Details.FirstOrDefault(x=>x.Name==user);
-            DashboardQuestion q = new DashboardQuestion();
+             var context = new CollegeBuddyEntities();
+             var obj = TokenManager.Identifytoken(token);
+                if (obj == null)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Token");
+                DashboardQuestion q = new DashboardQuestion();
             q.Question = Ques;
             q.ID = obj.Name;
-            q.Datetime = DateTime.Now;
-           context.DashboardQuestions.Add(q);
+            q.Datetime = DateTime.Now.Date;
+            q.Number = obj.ID;
+            q.CollegeName = obj.College;
+            context.DashboardQuestions.Add(q);
             context.SaveChanges();
-           
-
-                return Request.CreateResponse(HttpStatusCode.OK, "Added");
+            return Request.CreateResponse(HttpStatusCode.OK, "Added");
             }
             catch(Exception ex)
             {
@@ -61,16 +64,17 @@ namespace WebApplication3.Controllers
         public HttpResponseMessage Answer([FromUri]string token,[FromUri] int QID, [FromBody] string answer)
         {
             try
-            {
-                var user = MemberController.ValidateToken(token);
+            {               
                 var context = new CollegeBuddyEntities();
-                var obj = context.Details.FirstOrDefault(x => x.Name == user);
+                var obj = TokenManager.Identifytoken(token);
+                if (obj == null)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Token");
                 DashboardAnswer a = new DashboardAnswer();
                 a.Answer = answer;
                 a.QID = QID;
-                a.Name = user;
+                a.Name = obj.Name;
                 a.Upvotes = 0;
-                //a.ID = user;
+                a.identify = obj.ID;
                 context.DashboardAnswers.Add(a);
                 context.SaveChanges();
 
@@ -88,8 +92,10 @@ namespace WebApplication3.Controllers
         {
             try
             {
-                var user = MemberController.ValidateToken(token);
                 var context = new CollegeBuddyEntities();
+                var obj = TokenManager.Identifytoken(token);
+                if (obj == null)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Token");
                 var objx = context.DashboardAnswers.Where(x => x.QID == QID).Select(p => new { p.Answer,p.Name,p.Upvotes });
                 return Request.CreateResponse(HttpStatusCode.OK, objx);
 
@@ -102,35 +108,23 @@ namespace WebApplication3.Controllers
 
         [HttpPost]
         [Route("api/Dashboard/Upvote/{QID}/{AID}")]
-        public System.Web.Http.Results.RedirectToRouteResult Upvote([FromUri] string token, [FromUri] int AID,[FromUri] int QID)
+        public HttpResponseMessage Upvote([FromUri] string token, [FromUri] int AID,[FromUri] int QID)
         {
-           
-                var user = MemberController.ValidateToken(token);
-                var context = new CollegeBuddyEntities();
-                var objx = context.DashboardAnswers.SingleOrDefault(x => x.AID == AID);
+
+            var context = new CollegeBuddyEntities();
+            var obj = TokenManager.Identifytoken(token);
+            if (obj == null)
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid Token");
+            var objx = context.DashboardAnswers.SingleOrDefault(x => x.AID == AID);
                 objx.Upvotes = objx.Upvotes + 1;
                 context.SaveChanges();
           
-            return RedirectToRoute("api/Dashboard/QuestionDetails/{QID}",new { QID=QID });
-                //return Request.CreateResponse(HttpStatusCode.OK, objx.Upvotes);
+           
+                return Request.CreateResponse(HttpStatusCode.OK, objx.Upvotes);
      
            
         }
-        //[HttpPost]
-        //[Route("api/Dashboard/Comment/{AID}")]
-
-        //public HttpResponseMessage AddComment ([FromUri] string token,[FromBody] string comment, [FromUri] int AID)
-        //{
-        //    try
-        //    {
-
-
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
-        //    }
-        //}
+       
             
             
             }

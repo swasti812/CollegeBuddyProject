@@ -22,6 +22,7 @@
         <AssociationConnector Association="CollegeBuddyModel.FK_LibraryTable_Details" />
         <AssociationConnector Association="CollegeBuddyModel.FK_LibraryTable_PDFTable" />
         <AssociationConnector Association="CollegeBuddyModel.FK_PDFDetails_PDFTable" />
+        <AssociationConnector Association="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer1" />
         <AssociationConnector Association="CollegeBuddyModel.FK_PDFTable_PDFTable" />
       </Diagram>
     </edmx:Diagrams>

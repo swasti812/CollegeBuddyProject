@@ -10,22 +10,32 @@ using Twilio.Types;
 using Microsoft.AspNet.Identity;
 using System.Net;
 using System.Net.Http;
-
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication3.Models
 {
     public class MemberDetails
     {
         public int ID { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public string College { get; set; }
+        [Required]
         public string Branch { get; set; }
+        [Required]
         public string Year { get; set; }
+        [Required]
+        [MinLength(10, ErrorMessage = "Please enter a valid Phone Number")]
         public string MobileNo { get; set; }
+
         public string Image { get; set; }
+        [Required]
         public string Password { get; set; }
-    
-      public string GenerateRandomOTP(Detail detail)
+
+        public string GenerateRandomOTP(Detail detail)
 
         {
             string[] s = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -64,9 +74,75 @@ namespace WebApplication3.Models
             detail.IsVerified = false;
         }
 
-    
+        public static void YearEdit(Detail obj)
+        {
+            var context = new CollegeBuddyEntities();
+            var x = obj.Year;
+            if (x == "1")
+                x = x + "st";
+            if (x == "2")
+                x = x + "nd";
+            if (x == "3")
+                x = x + "rd";
+            if (x == "4")
+                x = x + "th";
 
+            obj.Year = x;
+            context.SaveChanges();
+
+
+        }
+        public static void YearFix(Detail obj)
+        {
+            var context = new CollegeBuddyEntities();
+            var x = obj.Year;
+            if (x == "1st")
+                x = "1";
+            if (x == "2nd")
+                x = "2";
+            if (x == "3rd")
+                x = "3";
+            if (x == "4th")
+                x = "4";
+
+            obj.Year = x;
+            context.SaveChanges();
+
+
+        }
+
+        public static string ProfileEdit(int ID,EditProfile editobj)
+        {
+            var context = new CollegeBuddyEntities();
+            var obj = context.Details.SingleOrDefault(x => x.ID == ID);
+            if (obj.Password == Crypto.Hash(editobj.OldPassword))
+            {
+                
+                obj.Password = Crypto.Hash(editobj.Password);
+                obj.Branch = editobj.Branch;
+                obj.Year = editobj.Year;
+                context.SaveChanges();
+                return ("Succesfully edited");
+            }
+            else
+            {
+                return ("Recheck Password");
+            }
+            
+        }
+
+        public static bool IsExist(string MobileNo)
+        {
+            var context = new CollegeBuddyEntities();
+            bool value = false;
+            var account = context.Details.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+            if (account != null)
+                value = true;
+            return value;
+        }
+        
     }
+    
     public class SmsService : IIdentityMessageService
     {
         public IdentityMessage Mssg(Detail obj,string otp)
@@ -80,14 +156,12 @@ namespace WebApplication3.Models
         }
         public void Messages(IdentityMessage message)
         {
-            var SMSAccountIdentification = "AC206f1df0fcf87ece093f014b4ce1cb64";
-            //var SMSAccountPassword = "Swastitiwari123";
-            var SMSAccountFrom = "+14025528331";
-            var AuthToken = "9af6c0e4807fd60dced4b14ec977b661";
-            //var accountSid = ConfigurationManager.AppSettings["SMSAccountIdentification"];
-            //var authToken = ConfigurationManager.AppSettings["SMSAccountPassword"];
-            //var fromNumber = ConfigurationManager.AppSettings["SMSAccountFrom"];
+            var SMSAccountIdentification = "ACfc89f37832e6c021522da103be490f92";
+            //var SMSAccountPassword = "swastitiw";
+            var SMSAccountFrom = "+19073187616";
 
+            var AuthToken = "4a97a25d0fe9309d7f136b346919ca98";
+            
 
 
 
@@ -100,11 +174,11 @@ namespace WebApplication3.Models
             body: message.Body
             );
 
-            //Status is one of Queued, Sending, Sent, Failed or null if the number is not valid
+            
             Trace.TraceInformation(result.Status.ToString());
-            //Twilio doesn't currently have an async API, so return success.
-            return;// Task.FromResult(0);
-                   //Twilio End
+            
+            return;
+                   
         }
 
         Task IIdentityMessageService.SendAsync(IdentityMessage message)

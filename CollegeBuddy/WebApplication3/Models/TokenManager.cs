@@ -6,20 +6,21 @@ using Microsoft.IdentityModel.Tokens;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using WebApplication3.Controllers;
 
 namespace WebApplication3.Models
 {
     public class TokenManager
     {
         private static string Secret = "XCAP05H6LoKvbRRa/QkqLNMI7cOHguaRyHzyg7n5qEkGjQmtBhz4SzYh4Fqwjyi3KJHlSXKPwVu2+bXr6CtpgQ==";
-        public static TOKEN_cs GenerateToken(string username)
+        public static TOKEN_cs GenerateToken(string name)
         {
             byte[] key = Convert.FromBase64String(Secret);
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] {
-                      new Claim(ClaimTypes.Name, username)}),
+                      new Claim(ClaimTypes.Name, name)}),
                 Expires = DateTime.UtcNow.AddMinutes(300),
                 SigningCredentials = new SigningCredentials(securityKey,
                 SecurityAlgorithms.HmacSha256Signature)
@@ -81,6 +82,14 @@ namespace WebApplication3.Models
             Claim usernameClaim = identity.FindFirst(ClaimTypes.Name);
             username = usernameClaim.Value;
             return username;
+        }
+        public static WebApplication3.Models.Detail Identifytoken(string token)
+        {
+
+            var user = MemberController.ValidateToken(token);
+            var context = new CollegeBuddyEntities();
+            var obj = context.Details.SingleOrDefault(x => x.MobileNo == user);
+            return obj;
         }
     }
 }

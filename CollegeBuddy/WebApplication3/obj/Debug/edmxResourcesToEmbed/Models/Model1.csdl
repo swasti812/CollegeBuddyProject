@@ -14,7 +14,7 @@
     <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="AuthCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
     <Property Name="IsVerified" Type="Boolean" />
-    <Property Name="datetime" Type="DateTime" Precision="0" />
+    <Property Name="datetime" Type="DateTime" Precision="3" />
     <NavigationProperty Name="AdditionalSubjects" Relationship="CollegeBuddyModel.FK_AdditionalSubjects_Details" FromRole="Detail" ToRole="AdditionalSubject" />
     <NavigationProperty Name="LibraryTables" Relationship="CollegeBuddyModel.FK_LibraryTable_Details" FromRole="Detail" ToRole="LibraryTable" />
   </EntityType>
@@ -57,6 +57,10 @@
       <End Role="PDFTable" EntitySet="PDFTables" />
       <End Role="PDFDetail" EntitySet="PDFDetails" />
     </AssociationSet>
+    <AssociationSet Name="FK_DashboardAnswer_DashboardAnswer1" Association="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer1">
+      <End Role="DashboardAnswer" EntitySet="DashboardAnswers" />
+      <End Role="DashboardAnswer1" EntitySet="DashboardAnswers" />
+    </AssociationSet>
     <AssociationSet Name="FK_PDFTable_PDFTable" Association="CollegeBuddyModel.FK_PDFTable_PDFTable">
       <End Role="SubjectTable" EntitySet="SubjectTables" />
       <End Role="PDFTable" EntitySet="PDFTables" />
@@ -73,6 +77,9 @@
     <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Upvotes" Type="Int32" />
     <NavigationProperty Name="CommentTables" Relationship="CollegeBuddyModel.FK_CommentTable_DashboardAnswer" FromRole="DashboardAnswer" ToRole="CommentTable" />
+    <Property Name="identify" Type="Int32" />
+    <NavigationProperty Name="DashboardAnswer1" Relationship="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer1" FromRole="DashboardAnswer" ToRole="DashboardAnswer1" />
+    <NavigationProperty Name="DashboardAnswer2" Relationship="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer1" FromRole="DashboardAnswer1" ToRole="DashboardAnswer" />
   </EntityType>
   <EntityType Name="DashboardQuestion">
     <Key>
@@ -83,6 +90,8 @@
     <Property Name="Datetime" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="DashboardAnswers" Relationship="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer" FromRole="DashboardQuestion" ToRole="DashboardAnswer" />
+    <Property Name="Number" Type="Int32" />
+    <Property Name="CollegeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK_DashboardAnswer_DashboardAnswer">
     <End Type="CollegeBuddyModel.DashboardQuestion" Role="DashboardQuestion" Multiplicity="1" />
@@ -154,7 +163,7 @@
     <Property Name="NameOfPDF" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Storage" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Key" Type="Int32" Nullable="false" />
+    <Property Name="Key" Type="Int32" />
     <NavigationProperty Name="LibraryTables" Relationship="CollegeBuddyModel.FK_LibraryTable_PDFTable" FromRole="PDFTable" ToRole="LibraryTable" />
     <NavigationProperty Name="PDFDetails" Relationship="CollegeBuddyModel.FK_PDFDetails_PDFTable" FromRole="PDFTable" ToRole="PDFDetail" />
     <NavigationProperty Name="SubjectTable" Relationship="CollegeBuddyModel.FK_PDFTable_PDFTable" FromRole="PDFTable" ToRole="SubjectTable" />
@@ -242,8 +251,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_DashboardAnswer_DashboardAnswer1">
+    <End Type="CollegeBuddyModel.DashboardAnswer" Role="DashboardAnswer" Multiplicity="1" />
+    <End Type="CollegeBuddyModel.DashboardAnswer" Role="DashboardAnswer1" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="DashboardAnswer">
+        <PropertyRef Name="AID" />
+      </Principal>
+      <Dependent Role="DashboardAnswer1">
+        <PropertyRef Name="AID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PDFTable_PDFTable">
-    <End Type="CollegeBuddyModel.SubjectTable" Role="SubjectTable" Multiplicity="1" />
+    <End Type="CollegeBuddyModel.SubjectTable" Role="SubjectTable" Multiplicity="0..1" />
     <End Type="CollegeBuddyModel.PDFTable" Role="PDFTable" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="SubjectTable">

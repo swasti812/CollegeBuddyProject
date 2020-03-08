@@ -13,14 +13,14 @@
           <Property Name="Key" Type="int" Nullable="false" />
           <Property Name="Seq" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
-        <EntityType Name="BranchTable">
+        <EntityType Name="BranchTables">
           <Key>
             <PropertyRef Name="BID" />
           </Key>
           <Property Name="BID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Branch" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="CommentTable">
+        <EntityType Name="CommentTables">
           <Key>
             <PropertyRef Name="Serial" />
           </Key>
@@ -30,24 +30,27 @@
           <Property Name="DateTime" Type="datetime" Nullable="false" />
           <Property Name="Serial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
-        <EntityType Name="DashboardAnswer">
+        <EntityType Name="DashboardAnswers">
           <Key>
             <PropertyRef Name="AID" />
           </Key>
-          <Property Name="AID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AID" Type="int" Nullable="false" />
           <Property Name="QID" Type="int" Nullable="false" />
           <Property Name="Answer" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Upvotes" Type="int" />
+          <Property Name="identify" Type="int" />
         </EntityType>
-        <EntityType Name="DashboardQuestion">
+        <EntityType Name="DashboardQuestions">
           <Key>
             <PropertyRef Name="QID" />
           </Key>
-          <Property Name="QID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QID" Type="int" Nullable="false" />
           <Property Name="Question" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="ID" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Datetime" Type="datetime" Nullable="false" />
+          <Property Name="ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Number" Type="int" />
+          <Property Name="CollegeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Details">
           <Key>
@@ -63,9 +66,9 @@
           <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="AuthCode" Type="nvarchar" MaxLength="10" />
           <Property Name="IsVerified" Type="bit" />
-          <Property Name="datetime" Type="smalldatetime" />
+          <Property Name="datetime" Type="datetime" />
         </EntityType>
-        <EntityType Name="LibraryTable">
+        <EntityType Name="LibraryTables">
           <Key>
             <PropertyRef Name="seq" />
           </Key>
@@ -84,7 +87,7 @@
           <Property Name="User" Type="int" Nullable="false" />
           <Property Name="Primarykey" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="PDFTable">
+        <EntityType Name="PDFTables">
           <Key>
             <PropertyRef Name="PKey" />
           </Key>
@@ -92,9 +95,9 @@
           <Property Name="NameOfPDF" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Storage" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Key" Type="int" Nullable="false" />
+          <Property Name="Key" Type="int" />
         </EntityType>
-        <EntityType Name="SubjectTable">
+        <EntityType Name="SubjectTables">
           <Key>
             <PropertyRef Name="Key" />
           </Key>
@@ -116,10 +119,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AdditionalSubjects_SubjectTable">
-          <End Role="SubjectTable" Type="Self.SubjectTable" Multiplicity="1" />
+          <End Role="SubjectTables" Type="Self.SubjectTables" Multiplicity="1" />
           <End Role="AdditionalSubjects" Type="Self.AdditionalSubjects" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="SubjectTable">
+            <Principal Role="SubjectTables">
               <PropertyRef Name="Key" />
             </Principal>
             <Dependent Role="AdditionalSubjects">
@@ -128,70 +131,70 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CommentTable_DashboardAnswer">
-          <End Role="DashboardAnswer" Type="Self.DashboardAnswer" Multiplicity="1" />
-          <End Role="CommentTable" Type="Self.CommentTable" Multiplicity="*" />
+          <End Role="DashboardAnswers" Type="Self.DashboardAnswers" Multiplicity="1" />
+          <End Role="CommentTables" Type="Self.CommentTables" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DashboardAnswer">
+            <Principal Role="DashboardAnswers">
               <PropertyRef Name="AID" />
             </Principal>
-            <Dependent Role="CommentTable">
+            <Dependent Role="CommentTables">
               <PropertyRef Name="AID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_DashboardAnswer_DashboardAnswer">
-          <End Role="DashboardQuestion" Type="Self.DashboardQuestion" Multiplicity="1" />
-          <End Role="DashboardAnswer" Type="Self.DashboardAnswer" Multiplicity="*" />
+          <End Role="DashboardQuestions" Type="Self.DashboardQuestions" Multiplicity="1" />
+          <End Role="DashboardAnswers" Type="Self.DashboardAnswers" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DashboardQuestion">
+            <Principal Role="DashboardQuestions">
               <PropertyRef Name="QID" />
             </Principal>
-            <Dependent Role="DashboardAnswer">
+            <Dependent Role="DashboardAnswers">
               <PropertyRef Name="QID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_DashboardAnswer_DashboardAnswer1">
-          <End Role="DashboardAnswer" Type="Self.DashboardAnswer" Multiplicity="1" />
-          <End Role="DashboardAnswer1" Type="Self.DashboardAnswer" Multiplicity="0..1" />
+          <End Role="DashboardAnswers" Type="Self.DashboardAnswers" Multiplicity="1" />
+          <End Role="DashboardAnswers1" Type="Self.DashboardAnswers" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="DashboardAnswer">
+            <Principal Role="DashboardAnswers">
               <PropertyRef Name="AID" />
             </Principal>
-            <Dependent Role="DashboardAnswer1">
+            <Dependent Role="DashboardAnswers1">
               <PropertyRef Name="AID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LibraryTable_Details">
           <End Role="Details" Type="Self.Details" Multiplicity="1" />
-          <End Role="LibraryTable" Type="Self.LibraryTable" Multiplicity="*" />
+          <End Role="LibraryTables" Type="Self.LibraryTables" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Details">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="LibraryTable">
+            <Dependent Role="LibraryTables">
               <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LibraryTable_PDFTable">
-          <End Role="PDFTable" Type="Self.PDFTable" Multiplicity="1" />
-          <End Role="LibraryTable" Type="Self.LibraryTable" Multiplicity="*" />
+          <End Role="PDFTables" Type="Self.PDFTables" Multiplicity="1" />
+          <End Role="LibraryTables" Type="Self.LibraryTables" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PDFTable">
+            <Principal Role="PDFTables">
               <PropertyRef Name="PKey" />
             </Principal>
-            <Dependent Role="LibraryTable">
+            <Dependent Role="LibraryTables">
               <PropertyRef Name="Pkey" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PDFDetails_PDFTable">
-          <End Role="PDFTable" Type="Self.PDFTable" Multiplicity="1" />
+          <End Role="PDFTables" Type="Self.PDFTables" Multiplicity="1" />
           <End Role="PDFDetails" Type="Self.PDFDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PDFTable">
+            <Principal Role="PDFTables">
               <PropertyRef Name="PKey" />
             </Principal>
             <Dependent Role="PDFDetails">
@@ -200,63 +203,63 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PDFTable_PDFTable">
-          <End Role="SubjectTable" Type="Self.SubjectTable" Multiplicity="1" />
-          <End Role="PDFTable" Type="Self.PDFTable" Multiplicity="*" />
+          <End Role="SubjectTables" Type="Self.SubjectTables" Multiplicity="0..1" />
+          <End Role="PDFTables" Type="Self.PDFTables" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="SubjectTable">
+            <Principal Role="SubjectTables">
               <PropertyRef Name="Key" />
             </Principal>
-            <Dependent Role="PDFTable">
+            <Dependent Role="PDFTables">
               <PropertyRef Name="Key" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="CollegeBuddyModelStoreContainer">
           <EntitySet Name="AdditionalSubjects" EntityType="Self.AdditionalSubjects" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BranchTable" EntityType="Self.BranchTable" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CommentTable" EntityType="Self.CommentTable" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DashboardAnswer" EntityType="Self.DashboardAnswer" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DashboardQuestion" EntityType="Self.DashboardQuestion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BranchTables" EntityType="Self.BranchTables" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommentTables" EntityType="Self.CommentTables" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DashboardAnswers" EntityType="Self.DashboardAnswers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DashboardQuestions" EntityType="Self.DashboardQuestions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Details" EntityType="Self.Details" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="LibraryTable" EntityType="Self.LibraryTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LibraryTables" EntityType="Self.LibraryTables" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PDFDetails" EntityType="Self.PDFDetails" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PDFTable" EntityType="Self.PDFTable" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SubjectTable" EntityType="Self.SubjectTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PDFTables" EntityType="Self.PDFTables" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubjectTables" EntityType="Self.SubjectTables" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AdditionalSubjects_Details" Association="Self.FK_AdditionalSubjects_Details">
             <End Role="Details" EntitySet="Details" />
             <End Role="AdditionalSubjects" EntitySet="AdditionalSubjects" />
           </AssociationSet>
           <AssociationSet Name="FK_AdditionalSubjects_SubjectTable" Association="Self.FK_AdditionalSubjects_SubjectTable">
-            <End Role="SubjectTable" EntitySet="SubjectTable" />
+            <End Role="SubjectTables" EntitySet="SubjectTables" />
             <End Role="AdditionalSubjects" EntitySet="AdditionalSubjects" />
           </AssociationSet>
           <AssociationSet Name="FK_CommentTable_DashboardAnswer" Association="Self.FK_CommentTable_DashboardAnswer">
-            <End Role="DashboardAnswer" EntitySet="DashboardAnswer" />
-            <End Role="CommentTable" EntitySet="CommentTable" />
+            <End Role="DashboardAnswers" EntitySet="DashboardAnswers" />
+            <End Role="CommentTables" EntitySet="CommentTables" />
           </AssociationSet>
           <AssociationSet Name="FK_DashboardAnswer_DashboardAnswer" Association="Self.FK_DashboardAnswer_DashboardAnswer">
-            <End Role="DashboardQuestion" EntitySet="DashboardQuestion" />
-            <End Role="DashboardAnswer" EntitySet="DashboardAnswer" />
+            <End Role="DashboardQuestions" EntitySet="DashboardQuestions" />
+            <End Role="DashboardAnswers" EntitySet="DashboardAnswers" />
           </AssociationSet>
           <AssociationSet Name="FK_DashboardAnswer_DashboardAnswer1" Association="Self.FK_DashboardAnswer_DashboardAnswer1">
-            <End Role="DashboardAnswer" EntitySet="DashboardAnswer" />
-            <End Role="DashboardAnswer1" EntitySet="DashboardAnswer" />
+            <End Role="DashboardAnswers" EntitySet="DashboardAnswers" />
+            <End Role="DashboardAnswers1" EntitySet="DashboardAnswers" />
           </AssociationSet>
           <AssociationSet Name="FK_LibraryTable_Details" Association="Self.FK_LibraryTable_Details">
             <End Role="Details" EntitySet="Details" />
-            <End Role="LibraryTable" EntitySet="LibraryTable" />
+            <End Role="LibraryTables" EntitySet="LibraryTables" />
           </AssociationSet>
           <AssociationSet Name="FK_LibraryTable_PDFTable" Association="Self.FK_LibraryTable_PDFTable">
-            <End Role="PDFTable" EntitySet="PDFTable" />
-            <End Role="LibraryTable" EntitySet="LibraryTable" />
+            <End Role="PDFTables" EntitySet="PDFTables" />
+            <End Role="LibraryTables" EntitySet="LibraryTables" />
           </AssociationSet>
           <AssociationSet Name="FK_PDFDetails_PDFTable" Association="Self.FK_PDFDetails_PDFTable">
-            <End Role="PDFTable" EntitySet="PDFTable" />
+            <End Role="PDFTables" EntitySet="PDFTables" />
             <End Role="PDFDetails" EntitySet="PDFDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_PDFTable_PDFTable" Association="Self.FK_PDFTable_PDFTable">
-            <End Role="SubjectTable" EntitySet="SubjectTable" />
-            <End Role="PDFTable" EntitySet="PDFTable" />
+            <End Role="SubjectTables" EntitySet="SubjectTables" />
+            <End Role="PDFTables" EntitySet="PDFTables" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -277,7 +280,7 @@
           <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AuthCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="IsVerified" Type="Boolean" />
-          <Property Name="datetime" Type="DateTime" Precision="0" />
+          <Property Name="datetime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="AdditionalSubjects" Relationship="CollegeBuddyModel.FK_AdditionalSubjects_Details" FromRole="Detail" ToRole="AdditionalSubject" />
           <NavigationProperty Name="LibraryTables" Relationship="CollegeBuddyModel.FK_LibraryTable_Details" FromRole="Detail" ToRole="LibraryTable" />
         </EntityType>
@@ -320,6 +323,10 @@
             <End Role="PDFTable" EntitySet="PDFTables" />
             <End Role="PDFDetail" EntitySet="PDFDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_DashboardAnswer_DashboardAnswer1" Association="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer1">
+            <End Role="DashboardAnswer" EntitySet="DashboardAnswers" />
+            <End Role="DashboardAnswer1" EntitySet="DashboardAnswers" />
+          </AssociationSet>
           <AssociationSet Name="FK_PDFTable_PDFTable" Association="CollegeBuddyModel.FK_PDFTable_PDFTable">
             <End Role="SubjectTable" EntitySet="SubjectTables" />
             <End Role="PDFTable" EntitySet="PDFTables" />
@@ -336,6 +343,9 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Upvotes" Type="Int32" />
           <NavigationProperty Name="CommentTables" Relationship="CollegeBuddyModel.FK_CommentTable_DashboardAnswer" FromRole="DashboardAnswer" ToRole="CommentTable" />
+          <Property Name="identify" Type="Int32" />
+          <NavigationProperty Name="DashboardAnswer1" Relationship="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer1" FromRole="DashboardAnswer" ToRole="DashboardAnswer1" />
+          <NavigationProperty Name="DashboardAnswer2" Relationship="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer1" FromRole="DashboardAnswer1" ToRole="DashboardAnswer" />
         </EntityType>
         <EntityType Name="DashboardQuestion">
           <Key>
@@ -346,6 +356,8 @@
           <Property Name="Datetime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="DashboardAnswers" Relationship="CollegeBuddyModel.FK_DashboardAnswer_DashboardAnswer" FromRole="DashboardQuestion" ToRole="DashboardAnswer" />
+          <Property Name="Number" Type="Int32" />
+          <Property Name="CollegeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_DashboardAnswer_DashboardAnswer">
           <End Type="CollegeBuddyModel.DashboardQuestion" Role="DashboardQuestion" Multiplicity="1" />
@@ -417,7 +429,7 @@
           <Property Name="NameOfPDF" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Storage" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Key" Type="Int32" Nullable="false" />
+          <Property Name="Key" Type="Int32" />
           <NavigationProperty Name="LibraryTables" Relationship="CollegeBuddyModel.FK_LibraryTable_PDFTable" FromRole="PDFTable" ToRole="LibraryTable" />
           <NavigationProperty Name="PDFDetails" Relationship="CollegeBuddyModel.FK_PDFDetails_PDFTable" FromRole="PDFTable" ToRole="PDFDetail" />
           <NavigationProperty Name="SubjectTable" Relationship="CollegeBuddyModel.FK_PDFTable_PDFTable" FromRole="PDFTable" ToRole="SubjectTable" />
@@ -505,8 +517,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DashboardAnswer_DashboardAnswer1">
+          <End Type="CollegeBuddyModel.DashboardAnswer" Role="DashboardAnswer" Multiplicity="1" />
+          <End Type="CollegeBuddyModel.DashboardAnswer" Role="DashboardAnswer1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="DashboardAnswer">
+              <PropertyRef Name="AID" />
+            </Principal>
+            <Dependent Role="DashboardAnswer1">
+              <PropertyRef Name="AID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PDFTable_PDFTable">
-          <End Type="CollegeBuddyModel.SubjectTable" Role="SubjectTable" Multiplicity="1" />
+          <End Type="CollegeBuddyModel.SubjectTable" Role="SubjectTable" Multiplicity="0..1" />
           <End Type="CollegeBuddyModel.PDFTable" Role="PDFTable" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SubjectTable">
@@ -521,119 +545,121 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="CollegeBuddyModelStoreContainer" CdmEntityContainer="CollegeBuddyEntities">
-          <EntitySetMapping Name="Details">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.Detail">
-              <MappingFragment StoreEntitySet="Details">
-                <ScalarProperty Name="datetime" ColumnName="datetime" />
-                <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
-                <ScalarProperty Name="AuthCode" ColumnName="AuthCode" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="College" ColumnName="College" />
-                <ScalarProperty Name="Branch" ColumnName="Branch" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DashboardAnswers">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.DashboardAnswer">
-              <MappingFragment StoreEntitySet="DashboardAnswer">
-                <ScalarProperty Name="Upvotes" ColumnName="Upvotes" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Answer" ColumnName="Answer" />
-                <ScalarProperty Name="QID" ColumnName="QID" />
-                <ScalarProperty Name="AID" ColumnName="AID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DashboardQuestions">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.DashboardQuestion">
-              <MappingFragment StoreEntitySet="DashboardQuestion">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Datetime" ColumnName="Datetime" />
-                <ScalarProperty Name="Question" ColumnName="Question" />
-                <ScalarProperty Name="QID" ColumnName="QID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AdditionalSubjects">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.AdditionalSubject">
-              <MappingFragment StoreEntitySet="AdditionalSubjects">
-                <ScalarProperty Name="Seq" ColumnName="Seq" />
-                <ScalarProperty Name="Key" ColumnName="Key" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BranchTables">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.BranchTable">
-              <MappingFragment StoreEntitySet="BranchTable">
-                <ScalarProperty Name="Branch" ColumnName="Branch" />
-                <ScalarProperty Name="BID" ColumnName="BID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CommentTables">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.CommentTable">
-              <MappingFragment StoreEntitySet="CommentTable">
-                <ScalarProperty Name="Serial" ColumnName="Serial" />
-                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="AID" ColumnName="AID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LibraryTables">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.LibraryTable">
-              <MappingFragment StoreEntitySet="LibraryTable">
-                <ScalarProperty Name="seq" ColumnName="seq" />
-                <ScalarProperty Name="Pkey" ColumnName="Pkey" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PDFDetails">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.PDFDetail">
-              <MappingFragment StoreEntitySet="PDFDetails">
-                <ScalarProperty Name="Primarykey" ColumnName="Primarykey" />
-                <ScalarProperty Name="User" ColumnName="User" />
-                <ScalarProperty Name="Downloads" ColumnName="Downloads" />
-                <ScalarProperty Name="Rating" ColumnName="Rating" />
-                <ScalarProperty Name="Review" ColumnName="Review" />
-                <ScalarProperty Name="PKey" ColumnName="PKey" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PDFTables">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.PDFTable">
-              <MappingFragment StoreEntitySet="PDFTable">
-                <ScalarProperty Name="Key" ColumnName="Key" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Storage" ColumnName="Storage" />
-                <ScalarProperty Name="NameOfPDF" ColumnName="NameOfPDF" />
-                <ScalarProperty Name="PKey" ColumnName="PKey" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SubjectTables">
-            <EntityTypeMapping TypeName="CollegeBuddyModel.SubjectTable">
-              <MappingFragment StoreEntitySet="SubjectTable">
-                <ScalarProperty Name="Subject" ColumnName="Subject" />
-                <ScalarProperty Name="BID" ColumnName="BID" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="Key" ColumnName="Key" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CollegeBuddyModelStoreContainer" CdmEntityContainer="CollegeBuddyEntities">
+    <EntitySetMapping Name="Details">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.Detail)">
+        <MappingFragment StoreEntitySet="Details">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="College" ColumnName="College" />
+          <ScalarProperty Name="Branch" ColumnName="Branch" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="AuthCode" ColumnName="AuthCode" />
+          <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
+          <ScalarProperty Name="datetime" ColumnName="datetime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DashboardAnswers">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.DashboardAnswer)">
+        <MappingFragment StoreEntitySet="DashboardAnswers">
+          <ScalarProperty Name="AID" ColumnName="AID" />
+          <ScalarProperty Name="QID" ColumnName="QID" />
+          <ScalarProperty Name="Answer" ColumnName="Answer" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Upvotes" ColumnName="Upvotes" />
+          <ScalarProperty Name="identify" ColumnName="identify" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DashboardQuestions">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.DashboardQuestion)">
+        <MappingFragment StoreEntitySet="DashboardQuestions">
+          <ScalarProperty Name="QID" ColumnName="QID" />
+          <ScalarProperty Name="Question" ColumnName="Question" />
+          <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Number" ColumnName="Number" />
+          <ScalarProperty Name="CollegeName" ColumnName="CollegeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdditionalSubjects">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.AdditionalSubject)">
+        <MappingFragment StoreEntitySet="AdditionalSubjects">
+          <ScalarProperty Name="Seq" ColumnName="Seq" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BranchTables">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.BranchTable)">
+        <MappingFragment StoreEntitySet="BranchTables">
+          <ScalarProperty Name="BID" ColumnName="BID" />
+          <ScalarProperty Name="Branch" ColumnName="Branch" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommentTables">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.CommentTable)">
+        <MappingFragment StoreEntitySet="CommentTables">
+          <ScalarProperty Name="Serial" ColumnName="Serial" />
+          <ScalarProperty Name="AID" ColumnName="AID" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LibraryTables">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.LibraryTable)">
+        <MappingFragment StoreEntitySet="LibraryTables">
+          <ScalarProperty Name="seq" ColumnName="seq" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Pkey" ColumnName="Pkey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PDFDetails">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.PDFDetail)">
+        <MappingFragment StoreEntitySet="PDFDetails">
+          <ScalarProperty Name="Primarykey" ColumnName="Primarykey" />
+          <ScalarProperty Name="PKey" ColumnName="PKey" />
+          <ScalarProperty Name="Review" ColumnName="Review" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="Downloads" ColumnName="Downloads" />
+          <ScalarProperty Name="User" ColumnName="User" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PDFTables">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.PDFTable)">
+        <MappingFragment StoreEntitySet="PDFTables">
+          <ScalarProperty Name="PKey" ColumnName="PKey" />
+          <ScalarProperty Name="NameOfPDF" ColumnName="NameOfPDF" />
+          <ScalarProperty Name="Storage" ColumnName="Storage" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubjectTables">
+      <EntityTypeMapping TypeName="IsTypeOf(CollegeBuddyModel.SubjectTable)">
+        <MappingFragment StoreEntitySet="SubjectTables">
+          <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="BID" ColumnName="BID" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -647,7 +673,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

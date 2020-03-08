@@ -24,6 +24,8 @@ namespace WebApplication3.Models
         public string Question { get; set; }
         public System.DateTime Datetime { get; set; }
         public string ID { get; set; }
+        public Nullable<int> Number { get; set; }
+        public string CollegeName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DashboardAnswer> DashboardAnswers { get; set; }
